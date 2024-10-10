@@ -1,13 +1,14 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"os"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/requests"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/requests"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +18,7 @@ func TestDocumentFetch(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.DOCUMENT + "/" + TestDocumentId
 	teardown, fixture := utils.StartMockServer(url, "fake_document")
 	defer teardown()
-	body, err := utils.Client.Document.Fetch(TestDocumentId, nil, nil)
+	body, err := utils.Client.Document.Fetch(context.Background(), TestDocumentId, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -38,7 +39,7 @@ func TestDocumentCreate(t *testing.T) {
 		Fields: fields,
 	}
 
-	body, err := utils.Client.Document.Create(params, nil)
+	body, err := utils.Client.Document.Create(context.Background(), params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

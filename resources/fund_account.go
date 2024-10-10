@@ -1,25 +1,26 @@
 package resources
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/requests"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/requests"
 )
 
-//FundAccount ...
+// FundAccount ...
 type FundAccount struct {
 	Request *requests.Request
 }
 
 // All fetches collection of fund accounts for the given queryParams.
-func (fa *FundAccount) All(queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (fa *FundAccount) All(ctx context.Context, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.FUND_ACCOUNT_URL)
-	return fa.Request.Get(url, queryParams, extraHeaders)
+	return fa.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
 // Create creates a fund account for the given data.
-func (fa *FundAccount) Create(data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (fa *FundAccount) Create(ctx context.Context, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.FUND_ACCOUNT_URL)
-	return fa.Request.Post(url, data, extraHeaders)
+	return fa.Request.Post(ctx, url, data, extraHeaders)
 }

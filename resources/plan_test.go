@@ -1,11 +1,12 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +16,7 @@ func TestPlanAll(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.PLAN_URL
 	teardown, fixture := utils.StartMockServer(url, "plan_collection")
 	defer teardown()
-	body, err := utils.Client.Plan.All(nil, nil)
+	body, err := utils.Client.Plan.All(context.Background(), nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -25,7 +26,7 @@ func TestPlanFetch(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.PLAN_URL + "/" + TestPlanID
 	teardown, fixture := utils.StartMockServer(url, "fake_plan")
 	defer teardown()
-	body, err := utils.Client.Plan.Fetch(TestPlanID, nil, nil)
+	body, err := utils.Client.Plan.Fetch(context.Background(), TestPlanID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -49,7 +50,7 @@ func TestPlanCreate(t *testing.T) {
 			"notes_key_2": "Tea, Earl Grey… decaf.",
 		},
 	}
-	body, err := utils.Client.Plan.Create(data, nil)
+	body, err := utils.Client.Plan.Create(context.Background(), data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

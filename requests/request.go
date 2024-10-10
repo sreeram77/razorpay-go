@@ -2,6 +2,7 @@ package requests
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -14,11 +15,11 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/errors"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/errors"
 )
 
-//Auth holds the values required to authenticate the requests made to Razorpay APIs
+// Auth holds the values required to authenticate the requests made to Razorpay APIs
 type Auth struct {
 	Key    string
 	Secret string
@@ -29,7 +30,7 @@ type FileUploadParams struct {
 	Fields map[string]string
 }
 
-//TIMEOUT ... client timeout
+// TIMEOUT ... client timeout
 const TIMEOUT = 10
 
 // Request encapsulates all the information required to make an HTTP request
@@ -97,7 +98,7 @@ func (request *Request) addRequestHeaders(req *http.Request, headers map[string]
 	request.addRequestHeadersInternal(req, headers)
 }
 
-//SetTimeout ...
+// SetTimeout ...
 func (request *Request) SetTimeout(timeout int16) {
 	timeoutSeconds := int64(timeout) * int64(time.Second)
 	request.HTTPClient = &http.Client{Timeout: time.Duration(timeoutSeconds)}
@@ -155,13 +156,13 @@ func (request *Request) doRequestResponse(req *http.Request) (map[string]interfa
 	return processResponse(response)
 }
 
-//Get ...
-func (request *Request) Get(path string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Get ...
+func (request *Request) Get(ctx context.Context, path string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("%s%s", request.BaseURL, path)
 
 	url = buildURLWithParams(url, queryParams)
 
-	req, _ := http.NewRequest("GET", url, nil)
+	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 
 	req.SetBasicAuth(request.Auth.Key, request.Auth.Secret)
 
@@ -170,14 +171,14 @@ func (request *Request) Get(path string, queryParams map[string]interface{}, ext
 	return request.doRequestResponse(req)
 }
 
-//Post ...
-func (request *Request) Post(path string, payload map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Post ...
+func (request *Request) Post(ctx context.Context, path string, payload map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 
 	jsonStr, _ := json.Marshal(payload)
 
 	url := fmt.Sprintf("%s%s", request.BaseURL, path)
 
-	req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req, _ := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewBuffer(jsonStr))
 
 	req.SetBasicAuth(request.Auth.Key, request.Auth.Secret)
 
@@ -186,14 +187,14 @@ func (request *Request) Post(path string, payload map[string]interface{}, extraH
 	return request.doRequestResponse(req)
 }
 
-//Patch ...
-func (request *Request) Patch(path string, payload map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Patch ...
+func (request *Request) Patch(ctx context.Context, path string, payload map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 
 	jsonStr, _ := json.Marshal(payload)
 
 	url := fmt.Sprintf("%s%s", request.BaseURL, path)
 
-	req, _ := http.NewRequest("PATCH", url, bytes.NewBuffer(jsonStr))
+	req, _ := http.NewRequestWithContext(ctx, http.MethodPatch, url, bytes.NewBuffer(jsonStr))
 
 	req.SetBasicAuth(request.Auth.Key, request.Auth.Secret)
 
@@ -202,14 +203,14 @@ func (request *Request) Patch(path string, payload map[string]interface{}, extra
 	return request.doRequestResponse(req)
 }
 
-//Put ...
-func (request *Request) Put(path string, payload map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Put ...
+func (request *Request) Put(ctx context.Context, path string, payload map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 
 	jsonStr, _ := json.Marshal(payload)
 
 	url := fmt.Sprintf("%s%s", request.BaseURL, path)
 
-	req, _ := http.NewRequest("PUT", url, bytes.NewBuffer(jsonStr))
+	req, _ := http.NewRequestWithContext(ctx, http.MethodPut, url, bytes.NewBuffer(jsonStr))
 
 	req.SetBasicAuth(request.Auth.Key, request.Auth.Secret)
 
@@ -218,14 +219,14 @@ func (request *Request) Put(path string, payload map[string]interface{}, extraHe
 	return request.doRequestResponse(req)
 }
 
-//Delete ...
-func (request *Request) Delete(path string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Delete ...
+func (request *Request) Delete(ctx context.Context, path string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 
 	url := fmt.Sprintf("%s%s", request.BaseURL, path)
 
 	url = buildURLWithParams(url, queryParams)
 
-	req, _ := http.NewRequest("DELETE", url, nil)
+	req, _ := http.NewRequestWithContext(ctx, http.MethodDelete, url, nil)
 
 	req.SetBasicAuth(request.Auth.Key, request.Auth.Secret)
 
@@ -234,7 +235,7 @@ func (request *Request) Delete(path string, queryParams map[string]interface{}, 
 	return request.doRequestResponse(req)
 }
 
-func (request *Request) File(path string, params FileUploadParams, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (request *Request) File(ctx context.Context, path string, params FileUploadParams, extraHeaders map[string]string) (map[string]interface{}, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 
@@ -263,7 +264,7 @@ func (request *Request) File(path string, params FileUploadParams, extraHeaders 
 	// Create the HTTP request
 	url := fmt.Sprintf("%s%s", request.BaseURL, path)
 
-	req, err := http.NewRequest("POST", url, body)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
 	if err != nil {
 		log.Fatal(err)
 	}

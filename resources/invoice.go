@@ -1,69 +1,68 @@
 package resources
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/requests"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/requests"
 )
 
-//Invoice ...
+// Invoice ...
 type Invoice struct {
 	Request *requests.Request
 }
 
 // All fetches multiple invoices for the given queryParams.
-func (inv *Invoice) All(queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (inv *Invoice) All(ctx context.Context, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.INVOICE_URL)
-	return inv.Request.Get(url, queryParams, extraHeaders)
+	return inv.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
 // Fetch fetches an invoice having the given invoiceID.
-func (inv *Invoice) Fetch(invoiceID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
-
+func (inv *Invoice) Fetch(ctx context.Context, invoiceID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s", constants.VERSION_V1, constants.INVOICE_URL, invoiceID)
-
-	return inv.Request.Get(url, queryParams, extraHeaders)
+	return inv.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
 // Create creates a new invoice for the given data.
-func (inv *Invoice) Create(data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (inv *Invoice) Create(ctx context.Context, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.INVOICE_URL)
-	return inv.Request.Post(url, data, extraHeaders)
+	return inv.Request.Post(ctx, url, data, extraHeaders)
 }
 
 // Cancel cancels a invoice having the given invoiceID.
-func (s *Invoice) Cancel(invoiceID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (inv *Invoice) Cancel(ctx context.Context, invoiceID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s/cancel", constants.VERSION_V1, constants.INVOICE_URL, invoiceID)
-	return s.Request.Post(url, queryParams, extraHeaders)
+	return inv.Request.Post(ctx, url, queryParams, extraHeaders)
 }
 
 // Delete delete a draft invoice having the given invoiceID.
-func (s *Invoice) Delete(invoiceID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (inv *Invoice) Delete(ctx context.Context, invoiceID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s", constants.VERSION_V1, constants.INVOICE_URL, invoiceID)
-	return s.Request.Delete(url, queryParams, extraHeaders)
+	return inv.Request.Delete(ctx, url, queryParams, extraHeaders)
 }
 
 // Update updates the invoice having the given invoiceID.
-func (s *Invoice) Update(invoiceID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (inv *Invoice) Update(ctx context.Context, invoiceID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s", constants.VERSION_V1, constants.INVOICE_URL, invoiceID)
-	return s.Request.Patch(url, data, extraHeaders)
+	return inv.Request.Patch(ctx, url, data, extraHeaders)
 }
 
-// Issue issue an invoice having the given invoiceID.
-func (s *Invoice) Issue(invoiceID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Issue issues an invoice having the given invoiceID.
+func (inv *Invoice) Issue(ctx context.Context, invoiceID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s/issue", constants.VERSION_V1, constants.INVOICE_URL, invoiceID)
-	return s.Request.Post(url, data, extraHeaders)
+	return inv.Request.Post(ctx, url, data, extraHeaders)
 }
 
-//Notify notify to customer via email or sms by the given invoiceID.
-func (s *Invoice) Notify(invoiceID string, medium string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Notify notify to customer via email or sms by the given invoiceID.
+func (inv *Invoice) Notify(ctx context.Context, invoiceID string, medium string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s/notify_by/%s", constants.VERSION_V1, constants.INVOICE_URL, invoiceID, medium)
-	return s.Request.Post(url, data, extraHeaders)
+	return inv.Request.Post(ctx, url, data, extraHeaders)
 }
 
 // CreateRegistrationLink creates a registration link
-func (s *Invoice) CreateRegistrationLink(data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (inv *Invoice) CreateRegistrationLink(ctx context.Context, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s/subscription_registration/auth_links", constants.VERSION_V1)
-	return s.Request.Post(url, data, extraHeaders)
+	return inv.Request.Post(ctx, url, data, extraHeaders)
 }

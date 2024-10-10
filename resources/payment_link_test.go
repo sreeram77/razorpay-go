@@ -1,11 +1,12 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +16,7 @@ func TestPaymentLinkAll(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.PaymentLink_URL
 	teardown, fixture := utils.StartMockServer(url, "paymentlink_collection")
 	defer teardown()
-	body, err := utils.Client.PaymentLink.All(nil, nil)
+	body, err := utils.Client.PaymentLink.All(context.Background(), nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -25,7 +26,7 @@ func TestPaymentLinkFetch(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.PaymentLink_URL + "/" + TestPaymentLinkID
 	teardown, fixture := utils.StartMockServer(url, "paymentlink_collection")
 	defer teardown()
-	body, err := utils.Client.PaymentLink.Fetch(TestPaymentLinkID, nil, nil)
+	body, err := utils.Client.PaymentLink.Fetch(context.Background(), TestPaymentLinkID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -45,7 +46,7 @@ func TestPaymentLinkCreate(t *testing.T) {
 		"decsription": "test",
 		"line_items":  lineItems,
 	}
-	body, err := utils.Client.PaymentLink.Create(data, nil)
+	body, err := utils.Client.PaymentLink.Create(context.Background(), data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -55,7 +56,7 @@ func TestPaymentLinkCancel(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.PaymentLink_URL + "/" + TestPaymentLinkID + "/cancel"
 	teardown, fixture := utils.StartMockServer(url, "fake_paymentlink")
 	defer teardown()
-	body, err := utils.Client.PaymentLink.Cancel(TestPaymentLinkID, nil, nil)
+	body, err := utils.Client.PaymentLink.Cancel(context.Background(), TestPaymentLinkID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -65,7 +66,7 @@ func TestPaymentLinkNotifyBy(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.PaymentLink_URL + "/" + TestPaymentLinkID + "/notify_by/email"
 	teardown, fixture := utils.StartMockServer(url, "fake_paymentlink")
 	defer teardown()
-	body, err := utils.Client.PaymentLink.NotifyBy(TestPaymentLinkID, "email", nil, nil)
+	body, err := utils.Client.PaymentLink.NotifyBy(context.Background(), TestPaymentLinkID, "email", nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -83,7 +84,7 @@ func TestPaymentLinkUpdate(t *testing.T) {
 			"policy_name": "Jeevan Saral",
 		},
 	}
-	body, err := utils.Client.PaymentLink.Update(TestPaymentLinkID, data, nil)
+	body, err := utils.Client.PaymentLink.Update(context.Background(), TestPaymentLinkID, data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

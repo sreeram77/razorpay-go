@@ -1,53 +1,54 @@
 package resources
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/requests"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/requests"
 )
 
-//Order ...
+// Order ...
 type Order struct {
 	Request *requests.Request
 }
 
 // All fetches multiple orders for the given query params.
-func (order *Order) All(queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (order *Order) All(ctx context.Context, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.ORDER_URL)
-	return order.Request.Get(url, queryParams, extraHeaders)
+	return order.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
 // Fetch fetches an order having the given orderID.
-func (order *Order) Fetch(orderID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (order *Order) Fetch(ctx context.Context, orderID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s", constants.VERSION_V1, constants.ORDER_URL, orderID)
-	return order.Request.Get(url, queryParams, extraHeaders)
+	return order.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
 // Create creates a new order for the given data
-func (order *Order) Create(data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (order *Order) Create(ctx context.Context, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.ORDER_URL)
-	return order.Request.Post(url, data, extraHeaders)
+	return order.Request.Post(ctx, url, data, extraHeaders)
 }
 
 // Update updates an order having the given orderID.
-func (order *Order) Update(orderID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (order *Order) Update(ctx context.Context, orderID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s", constants.VERSION_V1, constants.ORDER_URL, orderID)
-	return order.Request.Patch(url, data, extraHeaders)
+	return order.Request.Patch(ctx, url, data, extraHeaders)
 }
 
 // Payments fetches the payments for the given orderID.
-func (order *Order) Payments(orderID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (order *Order) Payments(ctx context.Context, orderID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s/payments", constants.VERSION_V1, constants.ORDER_URL, orderID)
-	return order.Request.Get(url, queryParams, extraHeaders)
+	return order.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
-func (order *Order) ViewRtoReview(orderID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (order *Order) ViewRtoReview(ctx context.Context, orderID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s/rto_review", constants.VERSION_V1, constants.ORDER_URL, orderID)
-	return order.Request.Post(url, data, extraHeaders)
+	return order.Request.Post(ctx, url, data, extraHeaders)
 }
 
-func (order *Order) EditFulfillment(orderID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (order *Order) EditFulfillment(ctx context.Context, orderID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s/fulfillment", constants.VERSION_V1, constants.ORDER_URL, orderID)
-	return order.Request.Post(url, data, extraHeaders)
+	return order.Request.Post(ctx, url, data, extraHeaders)
 }

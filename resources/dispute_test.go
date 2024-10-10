@@ -1,12 +1,13 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,7 +17,7 @@ func TestDisputeFetch(t *testing.T) {
 	url := fmt.Sprintf("/%s%s/%s", constants.VERSION_V1, constants.DISPUTE, TestDisputeID)
 	teardown, fixture := utils.StartMockServer(url, "fake_dispute")
 	defer teardown()
-	body, err := utils.Client.Dispute.Fetch(TestDisputeID, nil, nil)
+	body, err := utils.Client.Dispute.Fetch(context.Background(), TestDisputeID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -26,7 +27,7 @@ func TestDisputeAll(t *testing.T) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.DISPUTE)
 	teardown, fixture := utils.StartMockServer(url, "dispute_collection")
 	defer teardown()
-	body, err := utils.Client.Dispute.All(nil, nil)
+	body, err := utils.Client.Dispute.All(context.Background(), nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -36,7 +37,7 @@ func TestDisputeAccept(t *testing.T) {
 	url := fmt.Sprintf("/%s%s/%s/accept", constants.VERSION_V1, constants.DISPUTE, TestDisputeID)
 	teardown, fixture := utils.StartMockServer(url, "fake_dispute")
 	defer teardown()
-	body, err := utils.Client.Dispute.Accept(TestDisputeID, nil, nil)
+	body, err := utils.Client.Dispute.Accept(context.Background(), TestDisputeID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -64,7 +65,7 @@ func TestDisputeContest(t *testing.T) {
 		"action":         "draft",
 	}
 
-	body, err := utils.Client.Dispute.Contest(TestDisputeID, params, nil)
+	body, err := utils.Client.Dispute.Contest(context.Background(), TestDisputeID, params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

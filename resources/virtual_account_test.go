@@ -1,12 +1,13 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +18,7 @@ func TestVirtualAll(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.VIRTUAL_ACCOUNT_URL
 	teardown, fixture := utils.StartMockServer(url, "fake_virtual_collection")
 	defer teardown()
-	body, err := utils.Client.VirtualAccount.All(nil, nil)
+	body, err := utils.Client.VirtualAccount.All(context.Background(), nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -27,7 +28,7 @@ func TestVirtualFetch(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.VIRTUAL_ACCOUNT_URL + "/" + TestVirtualID
 	teardown, fixture := utils.StartMockServer(url, "fake_virtual")
 	defer teardown()
-	body, err := utils.Client.VirtualAccount.Fetch(TestVirtualID, nil, nil)
+	body, err := utils.Client.VirtualAccount.Fetch(context.Background(), TestVirtualID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -47,7 +48,7 @@ func TestVirtualCreate(t *testing.T) {
 		"decsription": "test",
 		"line_items":  lineItems,
 	}
-	body, err := utils.Client.VirtualAccount.Create(data, nil)
+	body, err := utils.Client.VirtualAccount.Create(context.Background(), data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -57,7 +58,7 @@ func TestVirtualClose(t *testing.T) {
 	url := fmt.Sprintf("/%s%s/%s/close", constants.VERSION_V1, constants.VIRTUAL_ACCOUNT_URL, TestVirtualID)
 	teardown, fixture := utils.StartMockServer(url, "virtual_collection")
 	defer teardown()
-	body, err := utils.Client.VirtualAccount.Close(TestVirtualID, nil, nil)
+	body, err := utils.Client.VirtualAccount.Close(context.Background(), TestVirtualID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -76,7 +77,7 @@ func TestVirtualAddReceiver(t *testing.T) {
 			"descriptor": "gauravkumar",
 		},
 	}
-	body, err := utils.Client.VirtualAccount.AddReceiver(TestVirtualID, data, nil)
+	body, err := utils.Client.VirtualAccount.AddReceiver(context.Background(), TestVirtualID, data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -93,7 +94,7 @@ func TestVirtualAllowedPayer(t *testing.T) {
 			"account_number": 914211112235679,
 		},
 	}
-	body, err := utils.Client.VirtualAccount.AllowedPayer(TestVirtualID, data, nil)
+	body, err := utils.Client.VirtualAccount.AllowedPayer(context.Background(), TestVirtualID, data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -103,7 +104,7 @@ func TestVirtualDeleteAllowedPayer(t *testing.T) {
 	url := fmt.Sprintf("/%s%s/%s/allowed_payers/%s", constants.VERSION_V1, constants.VIRTUAL_ACCOUNT_URL, TestVirtualID, PayerID)
 	teardown, fixture := utils.StartMockServer(url, "fake_allowed_payer")
 	defer teardown()
-	body, err := utils.Client.VirtualAccount.DeleteAllowedPayer(TestVirtualID, PayerID, nil, nil)
+	body, err := utils.Client.VirtualAccount.DeleteAllowedPayer(context.Background(), TestVirtualID, PayerID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

@@ -1,44 +1,45 @@
 package resources
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/requests"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/requests"
 )
 
-//QrCode ...
+// QrCode ...
 type QrCode struct {
 	Request *requests.Request
 }
 
 // Create creates a new qrcode for the given data.
-func (q *QrCode) Create(data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+func (q *QrCode) Create(ctx context.Context, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.QRCODE_URL)
-	return q.Request.Post(url, data, extraHeaders)
+	return q.Request.Post(ctx, url, data, extraHeaders)
 }
 
-//Fetch fetches the qrcode entity having the given QrCodeID.
-func (q *QrCode) FetchPayments(QrCodeID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// FetchPayments fetches the qrcode entity having the given QrCodeID.
+func (q *QrCode) FetchPayments(ctx context.Context, QrCodeID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s/payments", constants.VERSION_V1, constants.QRCODE_URL, url.PathEscape(QrCodeID))
-	return q.Request.Get(url, queryParams, extraHeaders)
+	return q.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
-//Fetch fetches the QrCode entity having the given QrCodeID.
-func (q *QrCode) Fetch(QrCodeID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Fetch fetches the QrCode entity having the given QrCodeID.
+func (q *QrCode) Fetch(ctx context.Context, QrCodeID string, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s", constants.VERSION_V1, constants.QRCODE_URL, url.PathEscape(QrCodeID))
-	return q.Request.Get(url, queryParams, extraHeaders)
+	return q.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
-//All fetches collection of QrCode for the given queryParams.
-func (q *QrCode) All(queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// All fetches collection of QrCode for the given queryParams.
+func (q *QrCode) All(ctx context.Context, queryParams map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s", constants.VERSION_V1, constants.QRCODE_URL)
-	return q.Request.Get(url, queryParams, extraHeaders)
+	return q.Request.Get(ctx, url, queryParams, extraHeaders)
 }
 
-//Close close a QrCode for the given QrCodeID.
-func (q *QrCode) Close(QrCodeID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
+// Close closes a QrCode for the given QrCodeID.
+func (q *QrCode) Close(ctx context.Context, QrCodeID string, data map[string]interface{}, extraHeaders map[string]string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("/%s%s/%s/close", constants.VERSION_V1, constants.QRCODE_URL, url.PathEscape(QrCodeID))
-	return q.Request.Post(url, data, extraHeaders)
+	return q.Request.Post(ctx, url, data, extraHeaders)
 }

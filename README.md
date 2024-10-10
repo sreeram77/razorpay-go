@@ -16,7 +16,7 @@ You can find your API keys at <https://dashboard.razorpay.com/#/app/keys>.
 
 ```go
 import (
-razorpay "github.com/razorpay/razorpay-go"
+razorpay "github.com/sreeram77/razorpay-go"
 )
 
 client := razorpay.NewClient("<YOUR_API_KEY>", "<YOUR_API_SECRET>")

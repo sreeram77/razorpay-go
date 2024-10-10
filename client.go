@@ -4,15 +4,15 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/requests"
-	"github.com/razorpay/razorpay-go/resources"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/requests"
+	"github.com/sreeram77/razorpay-go/resources"
 )
 
-//Request ...
+// Request ...
 var Request *requests.Request
 
-//Client provides various helper methods to make HTTP requests to Razorpay's APIs.
+// Client provides various helper methods to make HTTP requests to Razorpay's APIs.
 type Client struct {
 	Addon          *resources.Addon
 	Account        *resources.Account

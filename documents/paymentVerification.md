@@ -2,7 +2,7 @@
 
 ```go
 import (
-utils "github.com/razorpay/razorpay-go/utils"
+utils "github.com/sreeram77/razorpay-go/utils"
 )
 ```
 

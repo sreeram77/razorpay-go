@@ -1,11 +1,12 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +16,7 @@ func TestCardFetch(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.CARD_URL + "/" + TestCardID
 	teardown, fixture := utils.StartMockServer(url, "fake_card")
 	defer teardown()
-	body, err := utils.Client.Card.Fetch(TestCardID, nil, nil)
+	body, err := utils.Client.Card.Fetch(context.Background(), TestCardID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -28,7 +29,7 @@ func TestCardRequestCardReference(t *testing.T) {
 	data := map[string]interface{}{
 		"number": "4854980604708430",
 	}
-	body, err := utils.Client.Card.RequestCardReference(data, nil)
+	body, err := utils.Client.Card.RequestCardReference(context.Background(), data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

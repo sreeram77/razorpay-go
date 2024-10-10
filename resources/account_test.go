@@ -1,14 +1,15 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"strings"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +19,7 @@ func TestFetchAccount(t *testing.T) {
 	url := "/v2" + constants.ACCOUNT_URL + "/" + TestAccountID
 	teardown, fixture := utils.StartMockServer(url, "fake_account")
 	defer teardown()
-	body, err := utils.Client.Account.Fetch(TestAccountID, nil, nil)
+	body, err := utils.Client.Account.Fetch(context.Background(), TestAccountID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -39,7 +40,7 @@ func TestAccountCreate(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	body, err := utils.Client.Account.Create(mapData, nil)
+	body, err := utils.Client.Account.Create(context.Background(), mapData, nil)
 	assert.Equal(t, err, nil)
 	assert.Equal(t, body["email"], "gauriagain.kumar@example.org")
 }
@@ -52,7 +53,7 @@ func TestAccountEdit(t *testing.T) {
 		"name":  "test",
 		"email": "test@test.com",
 	}
-	body, err := utils.Client.Account.Edit(TestAccountID, params, nil)
+	body, err := utils.Client.Account.Edit(context.Background(), TestAccountID, params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -62,7 +63,7 @@ func TestAccountDelete(t *testing.T) {
 	url := "/v2" + constants.ACCOUNT_URL + "/" + TestAccountID
 	teardown, fixture := utils.StartMockServer(url, "fake_account")
 	defer teardown()
-	body, err := utils.Client.Account.Delete(TestAccountID, nil, nil)
+	body, err := utils.Client.Account.Delete(context.Background(), TestAccountID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -72,7 +73,7 @@ func TestAccountFetchDoc(t *testing.T) {
 	url := "/v2" + constants.ACCOUNT_URL + "/" + TestAccountID + "/documents"
 	teardown, fixture := utils.StartMockServer(url, "fake_doc_data")
 	defer teardown()
-	body, err := utils.Client.Account.FetchAccountDoc(TestAccountID, nil, nil)
+	body, err := utils.Client.Account.FetchAccountDoc(context.Background(), TestAccountID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

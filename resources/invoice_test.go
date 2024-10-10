@@ -1,12 +1,13 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +19,7 @@ func TestInvoiceAll(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.INVOICE_URL
 	teardown, fixture := utils.StartMockServer(url, "invoice_collection")
 	defer teardown()
-	body, err := utils.Client.Invoice.All(nil, nil)
+	body, err := utils.Client.Invoice.All(context.Background(), nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -31,7 +32,7 @@ func TestInvoiceAllWithOptions(t *testing.T) {
 	data := map[string]interface{}{
 		"count": 1,
 	}
-	body, err := utils.Client.Invoice.All(data, nil)
+	body, err := utils.Client.Invoice.All(context.Background(), data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -41,7 +42,7 @@ func TestInvoiceFetch(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.INVOICE_URL + "/" + TestInvoiceID
 	teardown, fixture := utils.StartMockServer(url, "fake_invoice")
 	defer teardown()
-	body, err := utils.Client.Invoice.Fetch(TestInvoiceID, nil, nil)
+	body, err := utils.Client.Invoice.Fetch(context.Background(), TestInvoiceID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -61,7 +62,7 @@ func TestInvoiceCreate(t *testing.T) {
 		"decsription": "test",
 		"line_items":  line_items,
 	}
-	body, err := utils.Client.Invoice.Create(data, nil)
+	body, err := utils.Client.Invoice.Create(context.Background(), data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -71,7 +72,7 @@ func TestInvoiceCancel(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.INVOICE_URL + "/" + TestInvoiceID + "/cancel"
 	teardown, fixture := utils.StartMockServer(url, "fake_invoice")
 	defer teardown()
-	body, err := utils.Client.Invoice.Cancel(TestInvoiceID, nil, nil)
+	body, err := utils.Client.Invoice.Cancel(context.Background(), TestInvoiceID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -81,7 +82,7 @@ func TestInvoiceDelete(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.INVOICE_URL + "/" + TestInvoiceID
 	teardown, fixture := utils.StartMockServer(url, "fake_invoice")
 	defer teardown()
-	body, err := utils.Client.Invoice.Delete(TestInvoiceID, nil, nil)
+	body, err := utils.Client.Invoice.Delete(context.Background(), TestInvoiceID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -97,7 +98,7 @@ func TestInvoiceUpdate(t *testing.T) {
 			"notes_key_2": "Tea, Earl Grey… decaf.",
 		},
 	}
-	body, err := utils.Client.Invoice.Update(TestInvoiceID, data, nil)
+	body, err := utils.Client.Invoice.Update(context.Background(), TestInvoiceID, data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -107,7 +108,7 @@ func TestInvoiceIssue(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.INVOICE_URL + "/" + TestInvoiceID + "/issue"
 	teardown, fixture := utils.StartMockServer(url, "fake_invoice")
 	defer teardown()
-	body, err := utils.Client.Invoice.Issue(TestInvoiceID, nil, nil)
+	body, err := utils.Client.Invoice.Issue(context.Background(), TestInvoiceID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -117,7 +118,7 @@ func TestInvoiceNotify(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.INVOICE_URL + "/" + TestInvoiceID + "/notify_by/" + medium
 	teardown, fixture := utils.StartMockServer(url, "success")
 	defer teardown()
-	body, err := utils.Client.Invoice.Notify(TestInvoiceID, medium, nil, nil)
+	body, err := utils.Client.Invoice.Notify(context.Background(), TestInvoiceID, medium, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 
 	assert.Equal(t, err, nil)
@@ -160,7 +161,7 @@ func TestCreateRegistrationLink(t *testing.T) {
 			"note_key 2": "Tea. Earl Gray. Hot.",
 		},
 	}
-	body, err := utils.Client.Invoice.CreateRegistrationLink(params, nil)
+	body, err := utils.Client.Invoice.CreateRegistrationLink(context.Background(), params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

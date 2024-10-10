@@ -1,14 +1,15 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"strings"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +20,7 @@ func TestStakeholderFetch(t *testing.T) {
 	url := "/v2" + constants.ACCOUNT_URL + "/" + TestStakeholderAccountId + constants.STAKEHOLDER_URL + "/" + TestStakeholderId
 	teardown, fixture := utils.StartMockServer(url, "fake_stakeholder")
 	defer teardown()
-	body, err := utils.Client.Stakeholder.Fetch(TestStakeholderAccountId, TestStakeholderId, nil, nil)
+	body, err := utils.Client.Stakeholder.Fetch(context.Background(), TestStakeholderAccountId, TestStakeholderId, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -41,7 +42,7 @@ func TestStakeholderCreate(t *testing.T) {
 		fmt.Println(err)
 	}
 
-	body, err := utils.Client.Stakeholder.Create("acc_M28vQMUgbIBo1N", mapData, nil)
+	body, err := utils.Client.Stakeholder.Create(context.Background(), "acc_M28vQMUgbIBo1N", mapData, nil)
 	assert.Equal(t, err, nil)
 	assert.Equal(t, body["id"], TestStakeholderId)
 }
@@ -56,7 +57,7 @@ func TestStakeholderEdit(t *testing.T) {
 			"secondary": "9898989898",
 		},
 	}
-	body, err := utils.Client.Stakeholder.Edit(TestStakeholderAccountId, TestStakeholderId, params, nil)
+	body, err := utils.Client.Stakeholder.Edit(context.Background(), TestStakeholderAccountId, TestStakeholderId, params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -66,7 +67,7 @@ func TestStakeholderAll(t *testing.T) {
 	url := "/v2" + constants.ACCOUNT_URL + "/" + TestStakeholderAccountId + constants.STAKEHOLDER_URL
 	teardown, fixture := utils.StartMockServer(url, "stakeholder_collection")
 	defer teardown()
-	body, err := utils.Client.Stakeholder.All(TestStakeholderAccountId, nil, nil)
+	body, err := utils.Client.Stakeholder.All(context.Background(), TestStakeholderAccountId, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -76,7 +77,7 @@ func TestStakeholderFetchDoc(t *testing.T) {
 	url := "/v2" + constants.ACCOUNT_URL + "/" + TestStakeholderAccountId + constants.STAKEHOLDER_URL + "/" + TestStakeholderId + "/documents"
 	teardown, fixture := utils.StartMockServer(url, "fake_doc_data")
 	defer teardown()
-	body, err := utils.Client.Stakeholder.FetchStakeholderDoc(TestStakeholderAccountId, TestStakeholderId, nil, nil)
+	body, err := utils.Client.Stakeholder.FetchStakeholderDoc(context.Background(), TestStakeholderAccountId, TestStakeholderId, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

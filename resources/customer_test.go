@@ -1,13 +1,14 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,7 +19,7 @@ func TestCustomerFetch(t *testing.T) {
 	url := "/" + constants.VERSION_V1 + constants.CUSTOMER_URL + "/" + TestCustomerID
 	teardown, fixture := utils.StartMockServer(url, "fake_customer")
 	defer teardown()
-	body, err := utils.Client.Customer.Fetch(TestCustomerID, nil, nil)
+	body, err := utils.Client.Customer.Fetch(context.Background(), TestCustomerID, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -32,7 +33,7 @@ func TestCustomerCreate(t *testing.T) {
 		"name":  "test",
 		"email": "test@test.com",
 	}
-	body, err := utils.Client.Customer.Create(params, nil)
+	body, err := utils.Client.Customer.Create(context.Background(), params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -45,7 +46,7 @@ func TestCustomerEdit(t *testing.T) {
 	params := map[string]interface{}{
 		"email": "test@test.com",
 	}
-	body, err := utils.Client.Customer.Edit(TestCustomerID, params, nil)
+	body, err := utils.Client.Customer.Edit(context.Background(), TestCustomerID, params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -58,7 +59,7 @@ func TestCustomerAll(t *testing.T) {
 	data := map[string]interface{}{
 		"count": 1,
 	}
-	body, err := utils.Client.Customer.All(data, nil)
+	body, err := utils.Client.Customer.All(context.Background(), data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -83,7 +84,7 @@ func TestAddBankAccount(t *testing.T) {
 		"beneficiary_state":    "KA",
 		"beneficiary_country":  "IN",
 	}
-	body, err := utils.Client.Customer.AddBankAccount(TestCustomerID, data, nil)
+	body, err := utils.Client.Customer.AddBankAccount(context.Background(), TestCustomerID, data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -94,7 +95,7 @@ func TestDeleteBankAccount(t *testing.T) {
 	teardown, fixture := utils.StartMockServer(url, "bank_account")
 	defer teardown()
 
-	body, err := utils.Client.Customer.DeleteBankAccount(TestCustomerID, "ba_LSZht1Cm7xFTwF", nil, nil)
+	body, err := utils.Client.Customer.DeleteBankAccount(context.Background(), TestCustomerID, "ba_LSZht1Cm7xFTwF", nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -105,7 +106,7 @@ func TestFetchEligibility(t *testing.T) {
 	teardown, fixture := utils.StartMockServer(url, "fake_eligibility")
 	defer teardown()
 
-	body, err := utils.Client.Customer.FetchEligibility(TestEligibility, nil, nil)
+	body, err := utils.Client.Customer.FetchEligibility(context.Background(), TestEligibility, nil, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -129,7 +130,7 @@ func TestRequestEligibilityCheck(t *testing.T) {
 		},
 	}
 
-	body, err := utils.Client.Customer.RequestEligibilityCheck(data, nil)
+	body, err := utils.Client.Customer.RequestEligibilityCheck(context.Background(), data, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)

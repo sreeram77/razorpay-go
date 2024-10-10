@@ -1,11 +1,12 @@
 package resources_test
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
-	"github.com/razorpay/razorpay-go/constants"
-	"github.com/razorpay/razorpay-go/utils"
+	"github.com/sreeram77/razorpay-go/constants"
+	"github.com/sreeram77/razorpay-go/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,7 +17,7 @@ func TestFundAccountAll(t *testing.T) {
 	params := map[string]interface{}{
 		"customer_id": "cust_Aa000000000001",
 	}
-	body, err := utils.Client.FundAccount.All(params, nil)
+	body, err := utils.Client.FundAccount.All(context.Background(), params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
@@ -36,7 +37,7 @@ func TestFundAccountCreate(t *testing.T) {
 		},
 	}
 
-	body, err := utils.Client.FundAccount.Create(params, nil)
+	body, err := utils.Client.FundAccount.Create(context.Background(), params, nil)
 	jsonByteArray, _ := json.Marshal(body)
 	assert.Equal(t, err, nil)
 	utils.TestResponse(jsonByteArray, []byte(fixture), t)
